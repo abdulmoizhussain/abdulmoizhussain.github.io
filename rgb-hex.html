@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>RGB&lt;--&gt;HEX</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./styles/bootstrap.min.css" />
+  <link rel="stylesheet" href="./styles/custom.css" />
+  <script src="./scripts/jquery.min.js"></script>
+  <script src="./scripts/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <script src="./scripts/nav-bar-n-footer.js"></script>
+  <script>
+    fetch(`https://raw.githubusercontent.com/abdulmoizhussain/javascript-helpers/master/rgb-hex.html`, {
+      mode: "cors"
+    }).then((res) => {
+      return res.text();
+    }).then((res) => {
+      const STYLE = `<style>` + parseTag(res, `<style>`, `</style>`) + `</style>`;
+      document.head.innerHTML += STYLE;
+      const BODY = parseTag(res, `<body>`, `</body>`);
+      const SCRIPT = parseTag(BODY, "<" + "script" + ">", "<" + "/" + "script" + ">").replace("<" + "script" + ">", "");
+      eval(SCRIPT);
+      document.body.innerHTML += BODY;
+    })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    function parseTag(source = "", starting = '', ending = '') {
+      return source.substring(source.indexOf(starting), source.indexOf(ending));
+    }
+  </script>
+</body>
+
+</html>
