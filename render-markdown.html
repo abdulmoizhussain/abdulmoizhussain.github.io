@@ -19,20 +19,29 @@
     }).then((res) => {
       return res.text();
     }).then((res) => {
-      const STYLE = `<style>` + parseTag(res, `<style>`, `</style>`) + `</style>`;
-      document.head.innerHTML += STYLE;
-      const BODY = parseTag(res, `<body>`, `</body>`);
-      const SCRIPT = parseTag(BODY, "<" + "script" + ">", "<" + "/" + "script" + ">").replace("<" + "script" + ">", "");
-			console.log(`TCL: SCRIPT`, SCRIPT);
-      eval(SCRIPT);
+      const STYLE = getTagsFromString(res, "style");
+      document.head.innerHTML += STYLE.length ? STYLE[0] : "";
+      const BODY = getTagsFromString(res, "body")[0];
+      const SCRIPT = getTagsFromString(BODY, "script", false);
+      eval(SCRIPT[2]);
       document.body.innerHTML += BODY;
     })
       .catch((err) => {
         console.log(err);
       });
 
-    function parseTag(source = "", starting = '', ending = '') {
-      return source.substring(source.indexOf(starting), source.indexOf(ending));
+    function getTagsFromString(source = "", tagName = '', surroundWithTag = true) {
+      tagName = tagName.toLowerCase();
+      const starting = `<${tagName}`;
+      const ending = `</${tagName}>`;
+      const result = [];
+      while (source.indexOf(starting) > -1) {
+        let str = source.substring(source.indexOf(starting), source.indexOf(ending)).replace(starting, "");
+        const surrounded = starting + str + ending;
+        result.push(surroundWithTag ? surrounded : (str.indexOf(">") === 0 ? str.replace(">", "") : str));
+        source = source.replace(surrounded, "");
+      }
+      return result;
     }
   </script>
 </body>
