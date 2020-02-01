@@ -18,11 +18,12 @@
       <li><a href="./rgb-hex.html">rgb-hex.html</a></li>
       <li><a href="./render-markdown.html">render-markdown.html</a></li>
       <li>
-        <label for="youtube_embedded_url">Convert embedded-youtube-url to web-url:</label>
+        <label for="youtube_embedded_url">Convert shared/embedded youtube-url to web-url:</label>
         <br>
         <input type="text" id="youtube_embedded_url" onkeyup="onChangeEmbeddedToWebUrl(this)" size="60%">
         <br>
         <span id="youtube_web_url"></span>
+        <button disabled id="button_copy_to_clip" onclick="copyToClip()">Copy</button>
       </li>
     </ol>
   </h3>

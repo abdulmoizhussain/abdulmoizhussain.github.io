@@ -1,20 +1,52 @@
 function onChangeEmbeddedToWebUrl(inputElement) {
   const resultElement = document.getElementById('youtube_web_url');
-  try {
-    const url = new URL(inputElement.value);
-    let videoId;
+  const buttonCopyToClip = document.getElementById('button_copy_to_clip');
 
-    if (url.search) {
-      const urlSearchParams = new URLSearchParams(url.search);
-      videoId = urlSearchParams.get('v');
-    } else {
-      videoId = url.pathname.replace('/', '');
-    }
+  // owner of regular expression -> https://stackoverflow.com/a/9836367/8075004
+  const result = new RegExp(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]{0,11}).*/g).exec(inputElement.value);
 
+  if (result && result.length > 2) {
+    const videoId = result[2];
     resultElement.innerHTML = `https://www.youtube.com/watch?v=${videoId}`;
-  } catch {
-    resultElement.innerHTML = 'Invalid url';
+    buttonCopyToClip.removeAttribute('disabled');
+  } else {
+    resultElement.innerHTML = `Invalid url`;
+    buttonCopyToClip.setAttribute('disabled', 'disabled');
   }
+
+  // OR
+  // try {
+  //   const url = new URL(inputElement.value);
+  //   let videoId;
+
+  //   if (url.search) {
+  //     const urlSearchParams = new URLSearchParams(url.search);
+  //     videoId = urlSearchParams.get('v');
+  //   } else {
+  //     videoId = url.pathname.replace('/', '');
+  //   }
+
+  //   resultElement.innerHTML = `https://www.youtube.com/watch?v=${videoId}`;
+  // } catch {
+  //   resultElement.innerHTML = 'Invalid url';
+  // }
+}
+
+function copyToClip() {
+  // owner of solution: https://www.w3schools.com/howto/howto_js_copy_clipboard.asp
+  const sourceElement = document.getElementById('youtube_web_url');
+  const input = document.createElement('input');
+
+  input.setAttribute('style', 'display: hidden;');
+  input.value = sourceElement.innerHTML;
+  document.body.appendChild(input);
+
+  input.select();
+  input.setSelectionRange(0, 99999); /*For mobile devices*/
+
+  document.execCommand("copy");
+
+  document.body.removeChild(input);
 }
 
 var navBarInnerHtml = `<div class="container">
