@@ -1,25 +1,22 @@
-function embeddedToWebUrlOnChange(inputElement) {
+function onChangeEmbeddedToWebUrl(inputElement) {
   const resultElement = document.getElementById('youtube_web_url');
   try {
     const url = new URL(inputElement.value);
     let videoId;
 
-    if (url) {
-      if (url.search) {
-        const urlSearchParams = new URLSearchParams(url.search);
-        videoId = urlSearchParams.get('v');
-      } else {
-        videoId = url.pathname.replace('/', '');
-      }
+    if (url.search) {
+      const urlSearchParams = new URLSearchParams(url.search);
+      videoId = urlSearchParams.get('v');
+    } else {
+      videoId = url.pathname.replace('/', '');
     }
 
-    if (videoId) {
-      resultElement.innerHTML = `https://www.youtube.com/watch?v=${videoId}`;
-      return;
-    }
-  } catch { }
-  resultElement.innerHTML = 'Invalid url';
+    resultElement.innerHTML = `https://www.youtube.com/watch?v=${videoId}`;
+  } catch {
+    resultElement.innerHTML = 'Invalid url';
+  }
 }
+
 var navBarInnerHtml = `<div class="container">
 <div class="navbar-header">
   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
