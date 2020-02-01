@@ -8,10 +8,10 @@ function onChangeEmbeddedToWebUrl(inputElement) {
   if (result && result.length > 2) {
     const videoId = result[2];
     resultElement.innerHTML = `https://www.youtube.com/watch?v=${videoId}`;
-    buttonCopyToClip.removeAttribute('disabled');
+    buttonCopyToClip.removeAttribute('style');
   } else {
-    resultElement.innerHTML = `Invalid url`;
-    buttonCopyToClip.setAttribute('disabled', 'disabled');
+    resultElement.innerHTML = `Invalid youtube url`;
+    buttonCopyToClip.setAttribute('style', 'display: none;');
   }
 
   // OR
@@ -37,7 +37,7 @@ function copyToClip() {
   const sourceElement = document.getElementById('youtube_web_url');
   const input = document.createElement('input');
 
-  input.setAttribute('style', 'display: hidden;');
+  input.setAttribute('style', 'display: hidden;'); // will not work with `display: none`
   input.value = sourceElement.innerHTML;
   document.body.appendChild(input);
 
