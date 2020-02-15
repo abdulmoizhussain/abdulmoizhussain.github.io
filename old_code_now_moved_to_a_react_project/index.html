@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>AM</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="icon" type="image/x-icon" class="js-site-favicon" href="https://github.githubassets.com/favicon.ico">
+
+  <link rel="stylesheet" href="./styles/bootstrap.min.css" />
+  <link rel="stylesheet" href="./styles/custom.css" />
+  <script src="./scripts/jquery.min.js"></script>
+  <script src="./scripts/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <h3>
+    <ol>
+      <li><a href="./rgb-hex.html">rgb-hex</a></li>
+      <li><a href="./render-markdown.html">render-markdown</a></li>
+      <li>
+        <label for="youtube_embedded_url">Convert shared/embedded youtube-url to web-url:</label>
+        <br>
+        <input type="text" id="youtube_embedded_url" onkeyup="onChangeEmbeddedToWebUrl(this)" size="60%">
+        <br>
+        <span id="youtube_web_url"></span>
+        <button id="button_copy_to_clip" onclick="copyToClip()" style="display: none;">Copy</button>
+      </li>
+    </ol>
+  </h3>
+  <script src="./scripts/nav-bar-n-footer.js"></script>
+</body>
+
+</html>
