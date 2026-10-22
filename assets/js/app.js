@@ -74,7 +74,9 @@
       try { rates = U.normalizeRates(JSON.parse(raw)); }
       catch { message('storage-status', 'Saved rates could not be read. The original saved data has been left untouched.'); }
     }
-    input.value = storageGet('LAUNDRY_DRAFT', '');
+    input.value = '';
+    // Retire drafts saved by the earlier version; only garment rates persist.
+    try { localStorage.removeItem('LAUNDRY_DRAFT'); } catch { /* Storage may be unavailable. */ }
     function hideResults() { $('laundry-results').hidden = true; }
     function renderRates() {
       const list = $('laundry-rates'); list.replaceChildren();
@@ -98,7 +100,7 @@
     }
     renderRates();
     input.addEventListener('input', () => {
-      storageSet('LAUNDRY_DRAFT', input.value); confirmedText = null; rows = []; $('laundry-calculate').disabled = true;
+      confirmedText = null; rows = []; $('laundry-calculate').disabled = true;
       renderRates();
       hideResults(); message('laundry-error', ''); message('laundry-status', 'Confirm rates after editing the list.');
     });

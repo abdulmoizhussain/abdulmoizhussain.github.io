@@ -30,8 +30,8 @@
   <section class="panel" aria-labelledby="list-heading">
     <h2 id="list-heading">1. Clothes list</h2>
     <label for="laundry-input">One entry per line: COUNTx TYPE</label>
-    <textarea id="laundry-input" class="laundry-input" rows="10" placeholder="2x Shirt&#10;3x Trouser&#10;1x Shirt" spellcheck="false" aria-describedby="laundry-hint"></textarea>
-    <p id="laundry-hint" class="hint">Garment names are case-sensitive. Repeated types are combined in the details. Your draft is saved on this device.</p>
+    <textarea id="laundry-input" class="laundry-input" rows="10" placeholder="2x Shirt&#10;3x Trouser&#10;1x Shirt" spellcheck="false" autocomplete="off" aria-describedby="laundry-hint"></textarea>
+    <p id="laundry-hint" class="hint">Garment names are case-sensitive. Repeated types are combined in the details. Only garment types and rates are saved; this list is not saved.</p>
     <div class="actions"><button id="laundry-confirm" type="button">Confirm Rates</button></div>
     <p id="laundry-status" class="status" role="status" hidden></p>
     <p id="laundry-error" class="error" role="alert" hidden></p>
