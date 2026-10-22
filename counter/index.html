@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#152d3b">
+  <meta name="description" content="Use the buttons, arrow keys, or swipe the count area.">
+  <title>Counter · WebUtils</title>
+  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script defer src="../assets/js/tools.js"></script>
+  <script defer data-app src="../assets/js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">WebUtils</a>
+      <nav aria-label="Main navigation"><a href="../index.html">Home</a><a href="../laundry/index.html">Laundry</a><a href="../url_converters/index.html">URL converters</a><a href="../rgb_to_hex/index.html">Colors</a><a href="../counter/index.html" aria-current="page">Counter</a><a href="../render_markdown/index.html">Markdown</a><a href="../percentage/index.html">Fees</a></nav>
+      <a class="github-link" href="https://github.com/abdulmoizhussain">My GitHub ↗</a>
+    </div>
+  </header>
+  <main id="main" tabindex="-1">
+    <div class="page-heading"><h1>Counter</h1><p class="muted">Use the buttons, arrow keys, or swipe the count area.</p></div>
+    <noscript><p class="error">Enable JavaScript to use the tools. Navigation works without it.</p></noscript>
+    <p id="storage-status" class="error" role="status" hidden></p>
+    
+<section class="panel counter-panel" aria-label="Counter controls">
+  <div class="actions" style="margin-top:0"><button id="counter-reset" class="danger" type="button">Reset</button><button id="counter-save" class="secondary" type="button">Save</button><button id="counter-undo" class="secondary" type="button" hidden>Undo reset</button></div>
+  <div id="counter-pad" class="counter-pad" aria-label="Swipe up or right to add; down or left to subtract"><output id="counter-value" class="counter-value" aria-live="polite" aria-atomic="true">0</output></div>
+  <div class="counter-controls"><button id="counter-minus" class="secondary" type="button" aria-label="Decrease counter">−</button><button id="counter-plus" type="button" aria-label="Increase counter">+</button></div>
+  <p class="hint" style="margin-top:8px">Up / right: +1 · Down / left: −1<br>Every change is saved automatically on this device.</p>
+  <p id="counter-status" class="status" role="status" hidden></p>
+</section>
+  </main>
+  <footer>WebUtils · Small tools for everyday tasks.</footer>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

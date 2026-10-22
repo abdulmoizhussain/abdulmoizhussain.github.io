@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#152d3b">
+  <meta name="description" content="Paste your list → confirm rates → calculate your bill.">
+  <title>Laundry calculator · WebUtils</title>
+  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script defer src="../assets/vendor/bignumber.js"></script>
+<script defer src="../assets/js/tools.js"></script>
+  <script defer data-app src="../assets/js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">WebUtils</a>
+      <nav aria-label="Main navigation"><a href="../index.html">Home</a><a href="../laundry/index.html" aria-current="page">Laundry</a><a href="../url_converters/index.html">URL converters</a><a href="../rgb_to_hex/index.html">Colors</a><a href="../counter/index.html">Counter</a><a href="../render_markdown/index.html">Markdown</a><a href="../percentage/index.html">Fees</a></nav>
+      <a class="github-link" href="https://github.com/abdulmoizhussain">My GitHub ↗</a>
+    </div>
+  </header>
+  <main id="main" tabindex="-1">
+    <div class="page-heading"><h1>Laundry calculator</h1><p class="muted">Paste your list → confirm rates → calculate your bill.</p></div>
+    <noscript><p class="error">Enable JavaScript to use the tools. Navigation works without it.</p></noscript>
+    <p id="storage-status" class="error" role="status" hidden></p>
+    
+<div class="grid">
+  <section class="panel" aria-labelledby="list-heading">
+    <h2 id="list-heading">1. Clothes list</h2>
+    <label for="laundry-input">One entry per line: COUNTx TYPE</label>
+    <textarea id="laundry-input" class="laundry-input" rows="10" placeholder="2x Shirt&#10;3x Trouser&#10;1x Shirt" spellcheck="false" aria-describedby="laundry-hint"></textarea>
+    <p id="laundry-hint" class="hint">Garment names are case-sensitive. Repeated types are combined in the details. Your draft is saved on this device.</p>
+    <div class="actions"><button id="laundry-confirm" type="button">Confirm Rates</button></div>
+    <p id="laundry-status" class="status" role="status" hidden></p>
+    <p id="laundry-error" class="error" role="alert" hidden></p>
+  </section>
+  <section class="panel" aria-labelledby="rates-heading">
+    <h2 id="rates-heading">2. Check rates <span class="muted">(rs per item)</span></h2>
+    <p id="rates-empty" class="hint">Confirm your clothes list to add garment types here. Previously saved rates appear automatically.</p>
+    <div id="laundry-rates" class="rate-list"></div>
+    <p id="rates-status" class="status" role="status" hidden></p>
+    <div class="actions"><button id="laundry-calculate" type="button" disabled>Calculate Total</button></div>
+  </section>
+  <section id="laundry-results" class="panel wide" aria-labelledby="bill-heading" hidden>
+    <h2 id="bill-heading">3. Your bill</h2>
+    <dl class="summary" aria-live="polite">
+      <div><dt>Total payment</dt><dd id="laundry-payment"></dd></div>
+      <div><dt>Total clothes</dt><dd id="laundry-count"></dd></div>
+      <div><dt>Total rows</dt><dd id="laundry-rows"></dd></div>
+    </dl>
+    <div class="table-wrap"><table><caption class="hint">Details grouped by garment type · amounts in rs</caption><thead><tr><th scope="col">Type</th><th scope="col">Count</th><th scope="col">Rate</th><th scope="col">Amount</th></tr></thead><tbody id="laundry-details"></tbody></table></div>
+  </section>
+</div>
+  </main>
+  <footer>WebUtils · Small tools for everyday tasks.</footer>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

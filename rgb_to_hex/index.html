@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#152d3b">
+  <meta name="description" content="Convert RGB and hex colors, with optional alpha transparency.">
+  <title>Color converter · WebUtils</title>
+  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script defer src="../assets/js/tools.js"></script>
+  <script defer data-app src="../assets/js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">WebUtils</a>
+      <nav aria-label="Main navigation"><a href="../index.html">Home</a><a href="../laundry/index.html">Laundry</a><a href="../url_converters/index.html">URL converters</a><a href="../rgb_to_hex/index.html" aria-current="page">Colors</a><a href="../counter/index.html">Counter</a><a href="../render_markdown/index.html">Markdown</a><a href="../percentage/index.html">Fees</a></nav>
+      <a class="github-link" href="https://github.com/abdulmoizhussain">My GitHub ↗</a>
+    </div>
+  </header>
+  <main id="main" tabindex="-1">
+    <div class="page-heading"><h1>Color converter</h1><p class="muted">Convert RGB and hex colors, with optional alpha transparency.</p></div>
+    <noscript><p class="error">Enable JavaScript to use the tools. Navigation works without it.</p></noscript>
+    <p id="storage-status" class="error" role="status" hidden></p>
+    
+<div class="grid">
+  <section class="panel" aria-labelledby="rgb-heading">
+    <h2 id="rgb-heading">RGB → Hex</h2>
+    <label for="rgb-input">RGB or RGBA value</label>
+    <input id="rgb-input" type="text" placeholder="255, 153, 0, 0.5" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="rgb-hint rgb-error">
+    <p id="rgb-hint" class="hint">Channels: 0–255. Optional alpha: 0–1. Accepts commas, spaces, and rgb() / rgba(). Hex output includes alpha.</p>
+    <p id="rgb-error" class="error" role="status" hidden></p><div id="rgb-results"></div>
+    <div class="swatch" aria-label="RGB color preview"><div id="rgb-swatch"></div></div>
+  </section>
+  <section class="panel" aria-labelledby="hex-heading">
+    <h2 id="hex-heading">Hex → RGB</h2>
+    <label for="hex-input">Hex color</label>
+    <input id="hex-input" type="text" placeholder="#0099FF or #0099FF80" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="hex-hint hex-error">
+    <p id="hex-hint" class="hint">Accepts 3, 4, 6, or 8 digits, with or without #. Alpha is shown to two decimal places.</p>
+    <p id="hex-error" class="error" role="status" hidden></p><div id="hex-results"></div>
+    <div class="swatch" aria-label="Hex color preview"><div id="hex-swatch"></div></div>
+  </section>
+</div>
+  </main>
+  <footer>WebUtils · Small tools for everyday tasks.</footer>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

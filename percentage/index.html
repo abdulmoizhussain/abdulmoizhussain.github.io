@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#152d3b">
+  <meta name="description" content="Estimate a converted price and compare it with the actual amount charged.">
+  <title>Currency &amp; fees · WebUtils</title>
+  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script defer src="../assets/vendor/bignumber.js"></script>
+<script defer src="../assets/js/tools.js"></script>
+  <script defer data-app src="../assets/js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">WebUtils</a>
+      <nav aria-label="Main navigation"><a href="../index.html">Home</a><a href="../laundry/index.html">Laundry</a><a href="../url_converters/index.html">URL converters</a><a href="../rgb_to_hex/index.html">Colors</a><a href="../counter/index.html">Counter</a><a href="../render_markdown/index.html">Markdown</a><a href="../percentage/index.html" aria-current="page">Fees</a></nav>
+      <a class="github-link" href="https://github.com/abdulmoizhussain">My GitHub ↗</a>
+    </div>
+  </header>
+  <main id="main" tabindex="-1">
+    <div class="page-heading"><h1>Currency &amp; fees</h1><p class="muted">Estimate a converted price and compare it with the actual amount charged.</p></div>
+    <noscript><p class="error">Enable JavaScript to use the tools. Navigation works without it.</p></noscript>
+    <p id="storage-status" class="error" role="status" hidden></p>
+    
+<div class="grid">
+  <section class="panel">
+    <h2>Amounts & rates</h2>
+    <form id="fee-form">
+      <div class="field"><label for="fee-rate">Exchange rate (local currency per USD)</label><input id="fee-rate" type="number" inputmode="decimal" min="0" step="any" value="154.97"></div>
+      <div class="field"><label for="fee-price">Price (USD)</label><input id="fee-price" type="number" inputmode="decimal" min="0" step="any" value="12.99"></div>
+      <div class="field"><label for="fee-percent">Bank fee (%)</label><input id="fee-percent" type="number" inputmode="decimal" min="0" step="any" value="5"></div>
+      <div class="field"><label for="fee-charged">Actual amount charged (local currency)</label><input id="fee-charged" type="number" inputmode="decimal" min="0" step="any" value="2123.78"></div>
+    </form>
+    <p class="hint">Enter your own exchange rate. These are editable example values, not live rates.</p>
+    <p id="fee-error" class="error" role="status" hidden></p>
+  </section>
+  <section id="fee-results" class="panel" aria-label="Calculation results" aria-live="polite">
+    <h2>Cost breakdown</h2>
+    <dl>
+      <div class="result-row"><dt>Converted price</dt><dd id="fee-base-result"></dd></div>
+      <div class="result-row"><dt>Bank fee amount</dt><dd id="fee-fee-result"></dd></div>
+      <div class="result-row"><dt>Total with bank fee</dt><dd id="fee-total-result"></dd></div>
+      <div class="result-row"><dt>Actual charge as % of converted price</dt><dd id="fee-percent-result"></dd></div>
+      <div class="result-row"><dt>Effective service fee above converted price</dt><dd id="fee-serviceFee-result"></dd></div>
+    </dl>
+  </section>
+</div>
+  </main>
+  <footer>WebUtils · Small tools for everyday tasks.</footer>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

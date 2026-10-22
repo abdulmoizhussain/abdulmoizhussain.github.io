@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#152d3b">
+  <meta name="description" content="Open a Markdown file, drop it here, or paste text for a live preview.">
+  <title>Markdown viewer · WebUtils</title>
+  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script defer src="../assets/vendor/marked.umd.js"></script>
+<script defer src="../assets/vendor/purify.min.js"></script>
+<script defer src="../assets/js/tools.js"></script>
+  <script defer data-app src="../assets/js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">WebUtils</a>
+      <nav aria-label="Main navigation"><a href="../index.html">Home</a><a href="../laundry/index.html">Laundry</a><a href="../url_converters/index.html">URL converters</a><a href="../rgb_to_hex/index.html">Colors</a><a href="../counter/index.html">Counter</a><a href="../render_markdown/index.html" aria-current="page">Markdown</a><a href="../percentage/index.html">Fees</a></nav>
+      <a class="github-link" href="https://github.com/abdulmoizhussain">My GitHub ↗</a>
+    </div>
+  </header>
+  <main id="main" tabindex="-1">
+    <div class="page-heading"><h1>Markdown viewer</h1><p class="muted">Open a Markdown file, drop it here, or paste text for a live preview.</p></div>
+    <noscript><p class="error">Enable JavaScript to use the tools. Navigation works without it.</p></noscript>
+    <p id="storage-status" class="error" role="status" hidden></p>
+    
+<div class="grid">
+  <section class="panel" aria-labelledby="editor-heading">
+    <h2 id="editor-heading">Markdown</h2>
+    <div id="markdown-drop" class="drop-zone"><label for="markdown-file">Choose or drop a file</label><input id="markdown-file" type="file" accept=".md,.markdown,.txt,text/markdown,text/plain"><span class="hint">.md, .markdown, or .txt · up to 2 MB</span></div>
+    <label for="markdown-input">Edit or paste Markdown</label><textarea id="markdown-input" class="editor" rows="18" spellcheck="false" placeholder="# Your heading&#10;&#10;Write **Markdown** here…"></textarea>
+    <p id="markdown-error" class="error" role="alert" hidden></p><p id="markdown-status" class="status" role="status" hidden></p>
+  </section>
+  <section class="panel" aria-labelledby="preview-heading"><h2 id="preview-heading">Preview</h2><p id="markdown-placeholder" class="hint">Your rendered document will appear here.</p><div id="markdown-preview" class="markdown-preview"></div></section>
+</div>
+  </main>
+  <footer>WebUtils · Small tools for everyday tasks.</footer>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

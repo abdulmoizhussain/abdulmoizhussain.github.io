@@ -1,20 +1,57 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <!-- <link rel="icon" type="image/svg+xml" href="/favicon.ico" /> -->
-  <link rel="icon" href="/favicon.ico" />
-  <!-- <link rel="" href="/bootstap.min.css" /> -->
-  <!-- <link rel="stylesheet" href="/bootstap.min.css"> -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WebUtils</title>
-  <script type="module" crossorigin src="/assets/index-JFxLayrc.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-wwhOz_o9.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#152d3b">
+  <meta name="description" content="Choose a tool, or use the quick converters below.">
+  <title>Your everyday tools · WebUtils</title>
+  <link rel="icon" href="./favicon.ico">
+  <link rel="stylesheet" href="./assets/css/styles.css">
+  <script defer src="./assets/js/tools.js"></script>
+  <script defer data-app src="./assets/js/app.js"></script>
 </head>
-
 <body>
-  <div id="root"></div>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="./index.html">WebUtils</a>
+      <nav aria-label="Main navigation"><a href="./index.html" aria-current="page">Home</a><a href="./laundry/index.html">Laundry</a><a href="./url_converters/index.html">URL converters</a><a href="./rgb_to_hex/index.html">Colors</a><a href="./counter/index.html">Counter</a><a href="./render_markdown/index.html">Markdown</a><a href="./percentage/index.html">Fees</a></nav>
+      <a class="github-link" href="https://github.com/abdulmoizhussain">My GitHub ↗</a>
+    </div>
+  </header>
+  <main id="main" tabindex="-1">
+    <div class="page-heading"><h1>Your everyday tools</h1><p class="muted">Choose a tool, or use the quick converters below.</p></div>
+    <noscript><p class="error">Enable JavaScript to use the tools. Navigation works without it.</p></noscript>
+    <p id="storage-status" class="error" role="status" hidden></p>
+    <section aria-label="Tools" class="tool-grid"><a class="tool-card featured" href="./laundry/index.html"><strong>Laundry calculator →</strong><span class="muted">Paste your clothes list, check saved rates, and total the bill.</span></a><a class="tool-card" href="./url_converters/index.html"><strong>URL converters →</strong><span class="muted">Git clone links, YouTube watch URLs, and searchable text.</span></a><a class="tool-card" href="./rgb_to_hex/index.html"><strong>Color converter →</strong><span class="muted">RGB and hex conversion, including transparency.</span></a><a class="tool-card" href="./counter/index.html"><strong>Counter →</strong><span class="muted">Count with buttons, swipes, or arrow keys. Saves automatically.</span></a><a class="tool-card" href="./render_markdown/index.html"><strong>Markdown viewer →</strong><span class="muted">Open a Markdown file or paste text for a live preview.</span></a><a class="tool-card" href="./percentage/index.html"><strong>Currency & fees →</strong><span class="muted">Calculate conversion costs, bank fees, and actual charges.</span></a></section><h2>Quick tools</h2><div class="grid">
+  <section class="panel" aria-labelledby="git-heading">
+    <h2 id="git-heading">Git repository URLs</h2>
+    <label for="git-input">Repository URL or owner/repository</label>
+    <input id="git-input" type="text" placeholder="owner/repository" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="git-hint git-error">
+    <p id="git-hint" class="hint">GitHub, GitLab, and Bitbucket HTTPS or SSH clone links. GitHub CLI output is included for GitHub.</p>
+    <p id="git-error" class="error" role="status" hidden></p>
+    <div id="git-results"></div>
+  </section>
+  <section class="panel" aria-labelledby="youtube-heading">
+    <h2 id="youtube-heading">YouTube URL converter</h2>
+    <label for="youtube-input">YouTube video URL</label>
+    <input id="youtube-input" type="url" placeholder="https://youtu.be/VIDEO_ID" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="youtube-hint youtube-error">
+    <p id="youtube-hint" class="hint">Convert shared, embed, Shorts, live, or watch links to a clean watch URL.</p>
+    <p id="youtube-error" class="error" role="status" hidden></p>
+    <div id="youtube-results"></div>
+  </section>
+  <section class="panel wide" aria-labelledby="clean-heading">
+    <h2 id="clean-heading">Make text searchable</h2>
+    <label for="clean-input">Text to clean</label>
+    <input id="clean-input" type="text" placeholder="Paste text with underscores, punctuation, or symbols" aria-describedby="clean-hint">
+    <p id="clean-hint" class="hint">Keeps English letters and numbers; replaces punctuation and symbols with spaces.</p>
+    <div class="actions"><button id="clean-copy" type="button">Clean &amp; Copy</button></div>
+    <p id="clean-output" class="output" style="margin-top:8px"></p>
+  </section>
+</div>
+  </main>
+  <footer>WebUtils · Small tools for everyday tasks.</footer>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 </body>
-
 </html>
