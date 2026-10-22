@@ -4,7 +4,9 @@
   const decimalPattern = /^(?:\d+(?:\.\d*)?|\.\d+)$/;
   function decimal(value, name = 'Value') {
     if (!decimalPattern.test(String(value).trim())) throw new Error(`${name} must be a non-negative number.`);
-    return new root.BigNumber(String(value).trim());
+    const result = new root.BigNumber(String(value).trim());
+    if (!result.isFinite()) throw new Error(`${name} must be a finite number.`);
+    return result;
   }
   function parseLaundry(text) {
     const rows = [], errors = [];
@@ -26,19 +28,31 @@
       .map((row, index) => ({ key: `rate-${index}`, clotheType: row.clotheType, rate: typeof row.rate === 'string' || typeof row.rate === 'number' ? String(row.rate) : '' }));
   }
   function calculateLaundry(rows, rates) {
+    if (!Array.isArray(rows) || !rows.length) throw new Error('Enter at least one clothes-list row.');
+    if (!Array.isArray(rates)) throw new Error('Garment rates must be a list.');
     let total = new root.BigNumber(0), totalClothes = 0;
     const details = new Map();
     for (const row of rows) {
-      const saved = rates.find(rate => rate.clotheType === row.clotheType);
-      const rate = decimal(saved ? saved.rate : '', `Rate for ${row.clotheType}`);
+      if (!row || typeof row.clotheType !== 'string' || !row.clotheType.trim()) throw new Error('Every row must have a garment type.');
+      if (!Number.isSafeInteger(row.count) || row.count < 0) throw new Error(`Count for ${row.clotheType} must be a non-negative safe integer.`);
+      const matches = rates.filter(saved => saved && saved.clotheType === row.clotheType);
+      if (matches.length > 1) throw new Error(`More than one rate is configured for ${row.clotheType}. Confirm a single rate.`);
+      const rate = decimal(matches.length ? matches[0].rate : '', `Rate for ${row.clotheType}`);
       const amount = rate.times(row.count);
+      if (!amount.isFinite()) throw new Error(`Amount for ${row.clotheType} is too large.`);
       total = total.plus(amount);
+      if (!total.isFinite()) throw new Error('The payment total is too large.');
       totalClothes += row.count;
       if (!Number.isSafeInteger(totalClothes)) throw new Error('The clothes count is too large.');
       const previous = details.get(row.clotheType);
-      details.set(row.clotheType, { clotheType: row.clotheType, count: row.count + (previous ? previous.count : 0), rate: rate.toString(), amount: amount.plus(previous ? previous.amount : 0).toString() });
+      details.set(row.clotheType, { clotheType: row.clotheType, count: row.count + (previous ? previous.count : 0), rate: rate.toFixed(), amount: amount.plus(previous ? previous.amount : 0).toFixed() });
     }
-    return { total: total.toFixed(2), totalClothes, totalRows: rows.length, details: [...details.values()] };
+    // Multiply and add exact decimals, then round the final payment once.
+    return { total: total.toFixed(2, root.BigNumber.ROUND_HALF_UP), totalClothes, totalRows: rows.length, details: [...details.values()] };
+  }
+  function formatLaundryAmount(value) {
+    const amount = decimal(value, 'Amount');
+    return amount.toFixed(Math.max(2, amount.decimalPlaces()));
   }
   function gitLinks(input) {
     const value = String(input).trim();
@@ -106,7 +120,7 @@
   }
   function cleanText(input) { return input.replace(/[^a-zA-Z0-9]+/g, ' ').trim(); }
   function readCounter(value) { return value !== null && /^-?\d+$/.test(value) && Number.isSafeInteger(Number(value)) ? Number(value) : 0; }
-  const api = { parseLaundry, normalizeRates, calculateLaundry, gitLinks, youtubeLink, rgbToHex, hexToRgb, calculateFees, cleanText, readCounter };
+  const api = { parseLaundry, normalizeRates, calculateLaundry, formatLaundryAmount, gitLinks, youtubeLink, rgbToHex, hexToRgb, calculateFees, cleanText, readCounter };
   root.WebUtils = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof globalThis !== 'undefined' ? globalThis : window);

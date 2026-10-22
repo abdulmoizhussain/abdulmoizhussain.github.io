@@ -92,6 +92,7 @@
         const currency = document.createElement('span'); currency.textContent = 'rs';
         control.addEventListener('input', () => {
           item.rate = control.value; hideResults(); message('laundry-error', '');
+          message('laundry-status', 'Rates changed. Calculate the total again.');
           if (storageSet('ClotheTypeAndRates', JSON.stringify(rates))) message('rates-status', 'Rates saved on this device.');
         });
         unit.append(control, currency); field.append(label, unit); list.append(field);
@@ -127,7 +128,7 @@
         const body = $('laundry-details'); body.replaceChildren();
         for (const item of result.details) {
           const row = document.createElement('tr');
-          for (const value of [item.clotheType, item.count, item.rate, new BigNumber(item.amount).toFixed(2)]) {
+          for (const value of [item.clotheType, item.count, U.formatLaundryAmount(item.rate), U.formatLaundryAmount(item.amount)]) {
             const cell = document.createElement('td'); cell.textContent = String(value); row.append(cell);
           }
           body.append(row);
