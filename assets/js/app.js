@@ -78,12 +78,13 @@
     function hideResults() { $('laundry-results').hidden = true; }
     function renderRates() {
       const list = $('laundry-rates'); list.replaceChildren();
-      const active = new Set(rows.map(row => row.clotheType));
-      const visibleRates = [...rates].sort((a, b) => Number(active.has(b.clotheType)) - Number(active.has(a.clotheType)) || a.clotheType.localeCompare(b.clotheType));
+      const active = new Set(U.parseLaundry(input.value).rows.map(row => row.clotheType));
+      const visibleRates = rates.filter(item => active.has(item.clotheType))
+        .sort((a, b) => a.clotheType.localeCompare(b.clotheType));
       for (const item of visibleRates) {
         const field = document.createElement('div'); field.className = 'rate-field';
         const label = document.createElement('label'); const id = `rate-${rates.indexOf(item)}`; label.htmlFor = id;
-        label.textContent = item.clotheType + (active.size && !active.has(item.clotheType) ? ' (saved)' : '');
+        label.textContent = item.clotheType;
         const unit = document.createElement('div'); unit.className = 'input-unit';
         const control = document.createElement('input'); control.id = id; control.type = 'number'; control.min = '0'; control.step = 'any'; control.inputMode = 'decimal'; control.value = item.rate;
         const currency = document.createElement('span'); currency.textContent = 'rs';
@@ -93,11 +94,12 @@
         });
         unit.append(control, currency); field.append(label, unit); list.append(field);
       }
-      $('rates-empty').hidden = rates.length > 0;
+      $('rates-empty').hidden = visibleRates.length > 0;
     }
     renderRates();
     input.addEventListener('input', () => {
       storageSet('LAUNDRY_DRAFT', input.value); confirmedText = null; rows = []; $('laundry-calculate').disabled = true;
+      renderRates();
       hideResults(); message('laundry-error', ''); message('laundry-status', 'Confirm rates after editing the list.');
     });
     $('laundry-confirm').addEventListener('click', () => {
