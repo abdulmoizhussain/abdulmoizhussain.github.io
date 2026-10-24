@@ -14,7 +14,7 @@
       if (!line.trim()) return;
       const match = /^(\d+)\s*[xX×]\s+(.+)$/.exec(line.trim());
       if (!match || !Number.isSafeInteger(Number(match[1]))) {
-        errors.push(`Line ${index + 1}: use COUNTx TYPE, for example 2x Shirt.`);
+        errors.push(`Line ${index + 1}: skipped "${line.trim()}". Use COUNTx TYPE, for example 2x Shirt.`);
       } else {
         rows.push({ count: Number(match[1]), clotheType: match[2].trim() });
       }
@@ -48,7 +48,7 @@
       details.set(row.clotheType, { clotheType: row.clotheType, count: row.count + (previous ? previous.count : 0), rate: rate.toFixed(), amount: amount.plus(previous ? previous.amount : 0).toFixed() });
     }
     // Multiply and add exact decimals, then round the final payment once.
-    return { total: total.toFixed(2, root.BigNumber.ROUND_HALF_UP), totalClothes, totalRows: rows.length, details: [...details.values()] };
+    return { total: total.toFixed(2, root.BigNumber.ROUND_HALF_UP), totalClothes, totalRows: rows.length, details: [...details.values()].sort((a, b) => a.clotheType.localeCompare(b.clotheType)) };
   }
   function formatLaundryAmount(value) {
     const amount = decimal(value, 'Amount');
@@ -81,14 +81,26 @@
     return links;
   }
   function youtubeLink(input) {
+    const text = String(input).trim().replace(/[\u200B-\u200F\uFEFF]/g, '');
+    // Single-line mobile inputs can remove the newline between a share title and URL.
+    const shared = /(https?:\/\/(?:(?:www|m|music)\.)?(?:youtube\.com|youtu\.be|youtube-nocookie\.com)\/[^\s<>"']+)/i.exec(text)
+      || /(?:^|[\s(<"'])((?:\/\/)?(?:(?:www|m|music)\.)?(?:youtube\.com|youtu\.be|youtube-nocookie\.com)\/[^\s<>"']+)/i.exec(text);
+    let candidate = (shared ? shared[1] : text).replace(/[)\],.;!?]+$/, '');
+    if (candidate.startsWith('//')) candidate = 'https:' + candidate;
+    else if (!/^[a-z][a-z\d+.-]*:/i.test(candidate)) candidate = 'https://' + candidate;
     let url;
-    try { url = new URL(input.trim()); } catch { throw new Error('Enter a full YouTube URL.'); }
+    try { url = new URL(candidate); } catch { throw new Error('Enter a YouTube video URL.'); }
     if (!['https:', 'http:'].includes(url.protocol)) throw new Error('Enter an HTTP or HTTPS YouTube URL.');
+    // Older mobile share links wrap a watch URL in an attribution link.
+    if (/^(?:www\.|m\.|music\.)?youtube\.com$/i.test(url.hostname) && url.pathname === '/attribution_link' && url.searchParams.has('u')) {
+      try { url = new URL(url.searchParams.get('u'), url.origin); } catch { throw new Error('Enter a YouTube video URL.'); }
+      if (!['https:', 'http:'].includes(url.protocol)) throw new Error('Enter an HTTP or HTTPS YouTube URL.');
+    }
     const host = url.hostname.toLowerCase().replace(/^www\./, '');
     let id;
     if (host === 'youtu.be') id = url.pathname.split('/')[1];
     else if (['youtube.com', 'm.youtube.com', 'music.youtube.com', 'youtube-nocookie.com'].includes(host)) {
-      if (url.pathname === '/watch') id = url.searchParams.get('v');
+      if (url.pathname.replace(/\/+$/, '') === '/watch') id = url.searchParams.get('v');
       else id = /^\/(?:embed|v|shorts|live|u\/\w+)\/([^/]+)/.exec(url.pathname)?.[1];
     }
     if (!id || !/^[\w-]{11}$/.test(id)) throw new Error('Use a YouTube watch, shared, embed, Shorts, or live-video link.');

@@ -9,6 +9,7 @@
   <link rel="icon" href="../favicon.ico">
   <link rel="stylesheet" href="../assets/css/styles.css">
   <script defer src="../assets/js/tools.js"></script>
+  <script defer src="../assets/js/clipboard.js"></script>
   <script defer data-app src="../assets/js/app.js"></script>
 </head>
 <body>
@@ -17,7 +18,7 @@
     <div class="header-inner">
       <a class="brand" href="../index.html">WebUtils</a>
       <nav aria-label="Main navigation"><a href="../index.html">Home</a><a href="../laundry/index.html">Laundry</a><a href="../url_converters/index.html" aria-current="page">URL converters</a><a href="../rgb_to_hex/index.html">Colors</a><a href="../counter/index.html">Counter</a><a href="../render_markdown/index.html">Markdown</a><a href="../percentage/index.html">Fees</a></nav>
-      <a class="github-link" href="https://github.com/abdulmoizhussain">Author's GitHub ↗</a>
+      <a class="github-link" href="https://github.com/abdulmoizhussain" target="_blank" rel="noopener noreferrer">Author's GitHub ↗</a>
     </div>
   </header>
   <main id="main" tabindex="-1">
@@ -35,9 +36,12 @@
   </section>
   <section class="panel" aria-labelledby="youtube-heading">
     <h2 id="youtube-heading">YouTube URL converter</h2>
-    <label for="youtube-input">YouTube video URL</label>
-    <input id="youtube-input" type="url" placeholder="https://youtu.be/VIDEO_ID" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="youtube-hint youtube-error">
-    <p id="youtube-hint" class="hint">Convert shared, embed, Shorts, live, or watch links to a clean watch URL.</p>
+    <form id="youtube-form" novalidate>
+      <label for="youtube-input">YouTube video URL</label>
+      <input id="youtube-input" type="text" inputmode="url" enterkeyhint="go" placeholder="https://youtu.be/VIDEO_ID" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="youtube-hint youtube-error">
+      <div class="actions"><button type="submit">Convert URL</button></div>
+    </form>
+    <p id="youtube-hint" class="hint">Paste a shared, embed, Shorts, live, or watch link. Links without https:// and shared text are accepted.</p>
     <p id="youtube-error" class="error" role="status" hidden></p>
     <div id="youtube-results"></div>
   </section>
@@ -47,7 +51,7 @@
     <input id="clean-input" type="text" placeholder="Paste text with underscores, punctuation, or symbols" aria-describedby="clean-hint">
     <p id="clean-hint" class="hint">Keeps English letters and numbers; replaces punctuation and symbols with spaces.</p>
     <div class="actions"><button id="clean-copy" type="button">Clean &amp; Copy</button></div>
-    <p id="clean-output" class="output" style="margin-top:8px"></p>
+    <div id="clean-result" class="result-row" hidden><label for="clean-output">Cleaned text</label><textarea id="clean-output" class="output" rows="2" readonly spellcheck="false"></textarea></div>
   </section>
 </div>
   </main>

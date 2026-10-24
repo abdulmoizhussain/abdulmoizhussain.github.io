@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../assets/css/styles.css">
   <script defer src="../assets/vendor/bignumber.js"></script>
 <script defer src="../assets/js/tools.js"></script>
+  <script defer src="../assets/js/clipboard.js"></script>
   <script defer data-app src="../assets/js/app.js"></script>
 </head>
 <body>
@@ -18,7 +19,7 @@
     <div class="header-inner">
       <a class="brand" href="../index.html">WebUtils</a>
       <nav aria-label="Main navigation"><a href="../index.html">Home</a><a href="../laundry/index.html" aria-current="page">Laundry</a><a href="../url_converters/index.html">URL converters</a><a href="../rgb_to_hex/index.html">Colors</a><a href="../counter/index.html">Counter</a><a href="../render_markdown/index.html">Markdown</a><a href="../percentage/index.html">Fees</a></nav>
-      <a class="github-link" href="https://github.com/abdulmoizhussain">Author's GitHub ↗</a>
+      <a class="github-link" href="https://github.com/abdulmoizhussain" target="_blank" rel="noopener noreferrer">Author's GitHub ↗</a>
     </div>
   </header>
   <main id="main" tabindex="-1">
@@ -34,6 +35,10 @@
     <p id="laundry-hint" class="hint">Garment names are case-sensitive. Repeated types are combined in the details. Only garment types and rates are saved; this list is not saved.</p>
     <div class="actions"><button id="laundry-confirm" type="button">Confirm Rates</button></div>
     <p id="laundry-status" class="status" role="status" hidden></p>
+    <details id="laundry-warnings" class="warning" hidden>
+      <summary id="laundry-warning-summary">Warnings</summary>
+      <ul id="laundry-warning-list"></ul>
+    </details>
     <p id="laundry-error" class="error" role="alert" hidden></p>
   </section>
   <section class="panel" aria-labelledby="rates-heading">
@@ -50,6 +55,7 @@
       <div><dt>Total clothes</dt><dd id="laundry-count"></dd></div>
       <div><dt>Total rows</dt><dd id="laundry-rows"></dd></div>
     </dl>
+    <p id="laundry-bill-note" class="hint" hidden></p>
     <p class="hint">Amounts are calculated exactly. The final payment is rounded once to two decimal places (half a paisa rounds up). Detail amounts keep any extra decimal places so you can check the sum.</p>
     <div class="table-wrap"><table><caption class="hint">Details grouped by garment type · amounts in rs</caption><thead><tr><th scope="col">Type</th><th scope="col">Count</th><th scope="col">Rate</th><th scope="col">Amount</th></tr></thead><tbody id="laundry-details"></tbody></table></div>
   </section>

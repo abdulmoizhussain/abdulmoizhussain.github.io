@@ -14,20 +14,9 @@
   let toastTimer;
   function toast(text) { message('toast', text); clearTimeout(toastTimer); toastTimer = setTimeout(() => message('toast', ''), 2600); }
   async function copy(value) {
-    try {
-      if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
-      await navigator.clipboard.writeText(value); toast('Copied');
-    } catch {
-      const area = document.createElement('textarea');
-      area.value = value; area.setAttribute('aria-label', 'Text to copy');
-      area.style.cssText = 'position:fixed;left:0;top:0;width:1px;height:1px;opacity:0';
-      const previous = document.activeElement;
-      document.body.append(area); area.select();
-      let success = false;
-      try { success = document.execCommand('copy'); } catch { /* Manual selection remains available in results. */ }
-      area.remove(); previous?.focus();
-      toast(success ? 'Copied' : 'Copy unavailable. Select the result and copy it manually.');
-    }
+    const copied = await window.WebClipboard.copyText(value);
+    toast(copied ? 'Copied' : 'Copy unavailable. Tap and hold the result to copy it manually.');
+    return copied;
   }
   function renderLinks(target, links) {
     target.replaceChildren();
@@ -43,21 +32,32 @@
   }
   function setupConverter(inputId, resultId, errorId, convert) {
     const input = $(inputId); if (!input) return;
-    input.addEventListener('input', () => {
+    function update() {
       $(resultId).replaceChildren(); message(errorId, ''); input.removeAttribute('aria-invalid');
       if (!input.value.trim()) return;
       try { renderLinks($(resultId), convert(input.value)); }
       catch (error) { message(errorId, error.message); input.setAttribute('aria-invalid', 'true'); }
-    });
+    }
+    input.addEventListener('input', update);
+    input.addEventListener('change', update);
+    if (inputId === 'youtube-input') {
+      $('youtube-form').addEventListener('submit', event => { event.preventDefault(); update(); });
+    }
   }
   setupConverter('git-input', 'git-results', 'git-error', U.gitLinks);
   setupConverter('youtube-input', 'youtube-results', 'youtube-error', value => [{ label: 'YouTube web URL', value: U.youtubeLink(value) }]);
   if ($('clean-input')) {
-    $('clean-input').addEventListener('input', () => { $('clean-output').textContent = U.cleanText($('clean-input').value); });
-    $('clean-copy').addEventListener('click', () => {
+    function updateCleanOutput() {
       const result = U.cleanText($('clean-input').value);
+      $('clean-output').value = result; $('clean-result').hidden = !result;
+      return result;
+    }
+    $('clean-input').addEventListener('input', updateCleanOutput);
+    $('clean-input').addEventListener('change', updateCleanOutput);
+    $('clean-copy').addEventListener('click', () => {
+      const result = updateCleanOutput();
       if (!result) return toast('Enter some text to clean first.');
-      $('clean-output').textContent = result; copy(result);
+      copy(result);
     });
   }
   if ($('laundry-input')) setupLaundry();
@@ -68,7 +68,7 @@
 
   function setupLaundry() {
     const input = $('laundry-input');
-    let rates = [], rows = [], confirmedText = null;
+    let rates = [], rows = [], confirmedText = null, skippedCount = 0;
     const raw = storageGet('ClotheTypeAndRates');
     if (raw) {
       try { rates = U.normalizeRates(JSON.parse(raw)); }
@@ -78,6 +78,15 @@
     // Retire drafts saved by the earlier version; only garment rates persist.
     try { localStorage.removeItem('LAUNDRY_DRAFT'); } catch { /* Storage may be unavailable. */ }
     function hideResults() { $('laundry-results').hidden = true; }
+    function renderWarnings(warnings) {
+      const section = $('laundry-warnings');
+      section.hidden = warnings.length === 0; section.open = false;
+      $('laundry-warning-summary').textContent = `Warning: ${warnings.length} unformatted ${warnings.length === 1 ? 'line' : 'lines'} skipped`;
+      const list = $('laundry-warning-list'); list.replaceChildren();
+      for (const warning of warnings) {
+        const item = document.createElement('li'); item.textContent = warning; list.append(item);
+      }
+    }
     function renderRates() {
       const list = $('laundry-rates'); list.replaceChildren();
       const active = new Set(U.parseLaundry(input.value).rows.map(row => row.clotheType));
@@ -102,6 +111,7 @@
     renderRates();
     input.addEventListener('input', () => {
       confirmedText = null; rows = []; $('laundry-calculate').disabled = true;
+      skippedCount = 0; renderWarnings([]);
       renderRates();
       hideResults(); message('laundry-error', ''); message('laundry-status', 'Confirm rates after editing the list.');
     });
@@ -109,14 +119,14 @@
       hideResults(); message('laundry-error', ''); message('laundry-status', '');
       const parsed = U.parseLaundry(input.value);
       rows = []; confirmedText = null; $('laundry-calculate').disabled = true;
-      if (parsed.errors.length) return message('laundry-error', parsed.errors.join('\n'));
-      if (!parsed.rows.length) return message('laundry-error', 'Paste your clothes list first, with one COUNTx TYPE entry per line.');
+      skippedCount = parsed.errors.length; renderWarnings(parsed.errors);
+      if (!parsed.rows.length) return message('laundry-status', 'No formatted rows found. Enter at least one COUNTx TYPE entry, for example 2x Shirt.');
       rows = parsed.rows; confirmedText = input.value;
       for (const type of [...new Set(rows.map(row => row.clotheType))].sort()) {
         if (!rates.some(rate => rate.clotheType === type)) rates.push({ key: `rate-${rates.length}`, clotheType: type, rate: '' });
       }
       renderRates(); $('laundry-calculate').disabled = false;
-      message('laundry-status', `${rows.length} rows ready. Check the rates, then calculate the total.`);
+      message('laundry-status', `${rows.length} formatted ${rows.length === 1 ? 'row' : 'rows'} ready. Check the rates, then calculate the total.`);
     });
     $('laundry-calculate').addEventListener('click', () => {
       message('laundry-error', ''); hideResults();
@@ -125,6 +135,7 @@
         const result = U.calculateLaundry(rows, rates);
         $('laundry-payment').textContent = `${result.total} rs`;
         $('laundry-count').textContent = String(result.totalClothes); $('laundry-rows').textContent = String(result.totalRows);
+        message('laundry-bill-note', skippedCount ? `Based on ${rows.length} formatted ${rows.length === 1 ? 'row' : 'rows'}; ${skippedCount} unformatted ${skippedCount === 1 ? 'line was' : 'lines were'} skipped. See the warning above.` : '');
         const body = $('laundry-details'); body.replaceChildren();
         for (const item of result.details) {
           const row = document.createElement('tr');
@@ -133,7 +144,7 @@
           }
           body.append(row);
         }
-        $('laundry-results').hidden = false; message('laundry-status', 'Total calculated for all confirmed rows.');
+        $('laundry-results').hidden = false; message('laundry-status', 'Total calculated for the formatted rows.');
         storageSet('ClotheTypeAndRates', JSON.stringify(rates));
       } catch (error) { message('laundry-error', error.message); }
     });
